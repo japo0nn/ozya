@@ -1,9 +1,16 @@
 #ifndef __HTTP_REQUEST_H__
 #define __HTTP_REQUEST_H__
 
+#include <sys/types.h>
+
+#include <nlohmann/json.hpp>
+
 #include "result.h"
 #include "string"
 
-Result send_http_request(std::string url, std::string body);
+enum class MethodType { POST, GET, PUT, PATCH, DELETE };
+
+auto send_http_request(const std::string& url, const std::string& body, MethodType method,
+                       const std::string& token = "") -> Result<nlohmann::json>;
 
 #endif

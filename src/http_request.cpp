@@ -1,5 +1,75 @@
 #include "http_request.h"
 
-using namespace std;
+#include <cstring>
+#include <nlohmann/json.hpp>
 
-Result send_http_request(string url, string body) { return Result::Success(); }
+#include "curl/curl.h"
+#include "iostream"
+
+using std::string;
+
+static auto WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) -> size_t {
+    ((string*) userp)->append((char*) contents, size * nmemb);
+    return size * nmemb;
+}
+
+auto method_to_string(MethodType method) -> string {
+    switch (method) {
+        case MethodType::POST:
+            return "POST";
+        case MethodType::PUT:
+            return "PUT";
+        case MethodType::PATCH:
+            return "PATCH";
+        case MethodType::DELETE:
+            return "DELETE";
+        case MethodType::GET:
+            return "GET";
+        default:
+            return "UNKNOWN";
+    }
+};
+
+auto send_http_request(const string& url, const string& body, MethodType method,
+                       const string& token) -> Result<nlohmann::json> {
+    CURL* curl = curl_easy_init();
+    if (!curl) return Result<nlohmann::json>::Failure("Curl initialization error!");
+
+    std::string response_json;
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_json);
+
+    switch (method) {
+        case MethodType::POST:
+        case MethodType::PUT:
+        case MethodType::PATCH:
+        case MethodType::DELETE:
+            curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method_to_string(method).c_str());
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body.c_str());
+            break;
+        default:
+            break;
+    }
+
+    struct curl_slist* headers = nullptr;
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+
+    if (token != "") {
+        std::string auth_header = "Authorization: Bearer " + token;
+        headers = curl_slist_append(headers, auth_header.c_str());
+    }
+    // Token addition to header
+
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+    CURLcode res = curl_easy_perform(curl);
+    if (res != CURLE_OK) {
+        return Result<nlohmann::json>::Failure(
+            string("Request error: ").append(curl_easy_strerror(res)));
+    }
+    nlohmann::json response = nlohmann::json::parse(response_json);
+    std::cout << "UserId is " << response["userId"] << "\n";
+    return Result<nlohmann::json>::Success(response);
+}

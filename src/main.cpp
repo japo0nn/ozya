@@ -1,11 +1,16 @@
+#include <nlohmann/json.hpp>
+
 #include "http_request.h"
 #include "iostream"
 #include "result.h"
 
-using namespace std;
+auto main() -> int {
+    std::string url = "https://jsonplaceholder.org/posts";
+    std::string body = "{\"title\":\"foo\",\"body\":\"bar\",\"userId\":1}";
+    Result<nlohmann::json> res = send_http_request(url, body, MethodType::POST);
 
-int main() {
-	Result res = send_http_request("sds", "sds");
-	cout << "Result success: " << res.IsSuccess() << endl;
-	return 0;
+    if (!res.isSuccess()) {
+        std::cout << res.getError() << "\n";
+    }
+    return 0;
 }
