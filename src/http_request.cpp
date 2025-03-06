@@ -30,7 +30,7 @@ auto method_to_string(MethodType method) -> string {
     }
 };
 
-auto send_http_request(const string& url, const string& body, MethodType method,
+auto send_http_request(const string& url, MethodType method, const string& body,
                        const string& token) -> Result<nlohmann::json> {
     CURL* curl = curl_easy_init();
     if (!curl) return Result<nlohmann::json>::Failure("Curl initialization error!");
@@ -69,7 +69,9 @@ auto send_http_request(const string& url, const string& body, MethodType method,
         return Result<nlohmann::json>::Failure(
             string("Request error: ").append(curl_easy_strerror(res)));
     }
+    std::cout << "response: " << res << '\n';
+    if (response_json == "") response_json = "{}";
     nlohmann::json response = nlohmann::json::parse(response_json);
-    std::cout << "UserId is " << response["userId"] << "\n";
+    std::cout << "asdasd" << '\n';
     return Result<nlohmann::json>::Success(response);
 }
