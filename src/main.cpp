@@ -1,18 +1,15 @@
-#include <nlohmann/json.hpp>
+#include <iostream>
 
-#include "http_request.h"
-#include "iostream"
-#include "result.h"
+#include "headers.h"
 
 auto main() -> int {
-    std::string url = "https://jsonplaceholder.org/posts";
-    std::string body = "{\"title\":\"foo\",\"body\":\"bar\",\"userId\":1}";
-    Result<nlohmann::json> res = send_http_request(url, MethodType::POST, body);
-
-    std::cout << "main.cpp" << '\n';
-
-    if (!res.isSuccess()) {
-        std::cout << res.getError() << "\n";
+    try {
+        std::string filePath = "./config.json";
+        std::string content = get_file_content(filePath);
+        nlohmann::json jsonString = nlohmann::json::parse(content);
+        std::cout << jsonString["ApiKey"] << '\n';
+    } catch (const std::exception& ex) {
+        std::cerr << ex.what() << '\n';
     }
     return 0;
 }

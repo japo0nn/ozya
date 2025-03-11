@@ -13,6 +13,10 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 find_package(CURL REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
-# Указываем исходные файлы
-add_executable(ozya src/main.cpp src/http_request.cpp)
+# Автоматически находим все файлы .cpp в папке src
+file(GLOB SRC_FILES src/*.cpp)
+
+# Добавляем все найденные файлы в исполняемый файл
+add_executable(ozya ${SRC_FILES})
+
 target_link_libraries(ozya PRIVATE CURL::libcurl nlohmann_json::nlohmann_json)

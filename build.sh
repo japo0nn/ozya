@@ -8,6 +8,8 @@ if [ ! -d "$BUILD_DIR" ]; then
     mkdir "$BUILD_DIR"
 fi
 
+cp ./resources/* ./build
+
 # Переход в директорию сборки
 cd "$BUILD_DIR"
 
