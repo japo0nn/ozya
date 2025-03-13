@@ -66,9 +66,7 @@ auto send_http_request(const string& url, MethodType method, const string& body,
         return Result<nlohmann::json>::Failure(
             string("Request error: ").append(curl_easy_strerror(res)));
     }
-    std::cout << "response: " << response_json << '\n';
     if (response_json == "") response_json = "{}";
     nlohmann::json response = nlohmann::json::parse(response_json);
-    std::cout << "asdasd" << '\n';
     return Result<nlohmann::json>::Success(response);
 }

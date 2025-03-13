@@ -1,13 +1,17 @@
 #include <iostream>
 
+#include "config.h"
+#include "gptlib.h"
 #include "headers.h"
 
 auto main() -> int {
     try {
-        std::string filePath = "./config.json";
-        std::string content = get_file_content(filePath);
-        nlohmann::json jsonString = nlohmann::json::parse(content);
-        std::cout << jsonString["ApiKey"] << '\n';
+        nlohmann::json config = config_init();
+        std::cout << config["apiKey"].get<std::string>() << '\n';
+        GPT gpt =
+            GPT::Create(config["mode"].get<std::string>(), config["apiKey"].get<std::string>());
+
+        std::cout << gpt.GetMode() << "\n";
     } catch (const std::exception& ex) {
         std::cerr << ex.what() << '\n';
     }

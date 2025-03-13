@@ -9,5 +9,6 @@
 #include "iostream"
 #include "result.h"
 #include "string"
+#include "string_helper.h"
 
 #endif
