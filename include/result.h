@@ -5,24 +5,6 @@
 
 #include "string"
 
-/* class Result { */
-/*    private: */
-/*     bool succeed{false}; */
-/*     std::string error_text; */
-/*  */
-/*     Result(bool p_succeed, const std::string& p_error_text) */
-/*         : succeed(p_succeed), error_text(p_error_text) {} */
-/*  */
-/*    public: */
-/*     static auto Success() -> Result { return Result(true, ""); } */
-/*  */
-/*     static auto Failure(const std::string& error) -> Result { return Result(false, error); } */
-/*  */
-/*     auto IsSuccess() -> bool { return succeed; } */
-/*  */
-/*     auto GetError() -> std::string { return error_text; } */
-/* }; */
-/*  */
 template <typename TData>
 class Result {
    private:

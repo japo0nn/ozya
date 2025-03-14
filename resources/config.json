@@ -1,4 +1,5 @@
 {
     "apiKey": "apikey",
-    "mode": "offline" 
+    "mode": "offline",
+    "model": "mistral"
 }

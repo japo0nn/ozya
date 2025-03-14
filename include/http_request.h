@@ -10,7 +10,7 @@
 
 enum class MethodType { POST, GET, PUT, PATCH, DELETE };
 
-auto send_http_request(const std::string& url, MethodType method, const std::string& body = "",
+auto send_http_request(const std::string& url, MethodType method, const nlohmann::json& body = {},
                        const std::string& token = "") -> Result<nlohmann::json>;
 
 #endif
