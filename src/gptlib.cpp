@@ -11,9 +11,7 @@ auto gpt_send_message(const GPT& gpt, const std::string& message) -> std::string
         {"model", gpt.GetModel()},
         {"messages",
          nlohmann::json::array(
-             {{{"role", "system"},
-               {"content",
-                "Ты - мой персональный, универсальный ассистент. И очень саркастичный."}},
+             {{{"role", "system"}, {"content", "Ты - персональный ассистент по языку C++."}},
               {{"role", "user"}, {"content", message}}})},
         {"stream", false}};
     Result<nlohmann::json> response = send_http_request(gpt.GetUrl(), MethodType::POST, payload);

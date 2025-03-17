@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Добавляем директорию с заголовочными файлами
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-
+find_package(SQLite3 REQUIRED)
 find_package(CURL REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
@@ -19,4 +19,4 @@ file(GLOB SRC_FILES src/*.cpp)
 # Добавляем все найденные файлы в исполняемый файл
 add_executable(ozya ${SRC_FILES})
 
-target_link_libraries(ozya PRIVATE CURL::libcurl nlohmann_json::nlohmann_json)
+target_link_libraries(ozya PRIVATE CURL::libcurl nlohmann_json::nlohmann_json /usr/lib/x86_64-linux-gnu/libsqlite3.so)
